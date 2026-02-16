@@ -16,11 +16,14 @@ ALLINC += src
 
 # Source files
 CSRC =	$(ALLCSRC)		\
-		src/main.c
-
+		src/main.c		\
+		src/peripherals/steering_input.c	
+		
 # Common library includes
 include common/src/debug.mk
 include common/src/fault_handler.mk
+include common/src/peripherals/adc/stm_adc.mk
+include common/src/peripherals/adc/analog_linear.mk
 
 # Compiler flags
 USE_OPT += -Og -Wall -Wextra
@@ -42,7 +45,7 @@ ULIBS +=
 
 # Common toolchain includes
 include common/common.mk
-include common/make/openocd_low_speed.mk
+include common/make/openocd.mk
 
 # ChibiOS compilation hooks
 PRE_MAKE_ALL_RULE_HOOK: $(BOARD_FILES) $(CLANGD_FILE)
