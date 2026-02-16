@@ -12,6 +12,8 @@
 #define ADC_CHANNEL_11 11
 // Come from STM datasheet
 
+#define UINT8_MAX_VALUE 255
+
 static const sibConfig_t sibConfig =
 {
     .driver = &CAND1,
@@ -75,7 +77,7 @@ static const stmAdcConfig_t adc_config =
 
 // Functions --------------------------------------------------------------------------------------------------------------------
 
-bool steeringInputInit(void /*sib_t* sib, const sibConfig_t* config*/) 
+bool steeringInputInit(void) 
 {
     // Set sib config
         sib.config = &sibConfig;
@@ -135,7 +137,7 @@ float triggerValue(trigger_id_t trig_id)
 
 // Can Transmit Function ------------------------------------------------------------------------------------------------------
 
-msg_t steeringInputTransmit(void /*sib_t* sib*/) 
+msg_t steeringInputTransmit(void) 
 {
     uint8_t button_byte = 0;   // Start 00000000
     uint8_t right_percent = 0;
@@ -150,8 +152,8 @@ msg_t steeringInputTransmit(void /*sib_t* sib*/)
 
     if (stmAdcSample(&steering_adc)) {
         // Sample from paddles is 100 -> 0, subtract ADC value from 100 to flip
-        left_percent = (uint8_t)((100.0f - triggerValue(TRIG_LT)) * 255.0f / 100.0f);
-        right_percent = (uint8_t)((100.0f - triggerValue(TRIG_RT)) * 255.0f / 100.0f);
+        left_percent = (uint8_t)((100.0f - triggerValue(TRIG_LT)) * UINT8_MAX_VALUE / 100.0f);
+        right_percent = (uint8_t)((100.0f - triggerValue(TRIG_RT)) * UINT8_MAX_VALUE / 100.0f);
     }
 
     CANTxFrame transmit = 

@@ -1,6 +1,5 @@
 // Includes -------------------------------------------------------------------------------------------------------------------
 
-// Includes
 #include "debug.h"
 
 // ChibiOS
@@ -13,7 +12,6 @@
 
 int main (void)
 {
-
 	// ChibiOS Initialization
 	halInit ();
 	chSysInit ();
@@ -43,6 +41,7 @@ int main (void)
 	canStart(&CAND1, &CAN_DRIVER_CONFIG);
 	palClearLine (LINE_CAN1_STBY);
 
+	// Steering Input Board 
 	steeringInputInit();
 
 	// SIB can transmission (25hz transmission)

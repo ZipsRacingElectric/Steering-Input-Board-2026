@@ -68,9 +68,6 @@ typedef struct
     const sibConfig_t* config;
 } sib_t;
 
-//const sibConfig_t sibConfig;
-//sib_t sib;
-
 // Functions -------------------------------------------------------------------------------------------------------------------
 
 /**
@@ -81,7 +78,7 @@ typedef struct
 * @return Returns true if successful, false if not successful.
 */
 
-bool steeringInputInit(void /*sib_t* sib, const sibConfig_t* config*/);
+bool steeringInputInit(void);
 
 /**
  * @brief Take GPIO and ADC input and transmit a can message.
@@ -90,6 +87,6 @@ bool steeringInputInit(void /*sib_t* sib, const sibConfig_t* config*/);
  * @return MSG_OK if transmit is successful.
  */
 
-msg_t steeringInputTransmit(void /*sib_t* sib*/);
+msg_t steeringInputTransmit(void);
 
 #endif // STEERING_INPUT_H
