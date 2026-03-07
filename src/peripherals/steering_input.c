@@ -8,16 +8,19 @@
 
 // Constants ------------------------------------------------------------------------------------------------------------------
 
+// REVIEW(Barach): You can use ADC_CHANNEL_IN10 and ADC_CHANNEL_IN11 from ChibiOS
 #define ADC_CHANNEL_10 10
 #define ADC_CHANNEL_11 11
 // Come from STM datasheet
 
+// REVIEW(Barach): You can use UINT8_MAX
 #define UINT8_MAX_VALUE 255
 
 static const sibConfig_t sibConfig =
 {
     .driver = &CAND1,
     .timeout = TIME_MS2I(100),
+	// REVIEW(Barach): I'd probably pull this out into a constant (same as in main with #define)
     .baseId = 0x405,
 
     .trigger_id_t = {
@@ -65,11 +68,13 @@ static const stmAdcConfig_t adc_config =
     .channels = { 
         ADC_CHANNEL_10, 
         ADC_CHANNEL_11,
+		// REVIEW(Barach): C will, by default, set all non-specified elements to 0, so you don't need this here.
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     },
     .sensors = {
         (analogSensor_t*)&trigger_sensors[0],
         (analogSensor_t*)&trigger_sensors[1],
+		// REVIEW(Barach): Same as above.
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
     },
     .channelCount = 2
@@ -80,17 +85,36 @@ static const stmAdcConfig_t adc_config =
 bool steeringInputInit(void) 
 {
     // Set sib config
-        sib.config = &sibConfig;
+	sib.config = &sibConfig;
 
     // Set buttons configs
     for (int i = 0; i < BTN_COUNT; i++) 
     {
+		// REVIEW(Barach): This can be done in board.chcfg. For instance, in the <GPIOB> section:
+		//   <pin8
+		//     ID="BTN_LU"
+		//     Type="PushPull"
+		//     Level="High"
+		//     Speed="Minimum"
+		//     Resistor="PullUp"
+		//     Mode="Input"
+		//     Alternate="0" />
+
         palSetPadMode(buttons[i].port, buttons[i].pad, buttons[i].mode);
     }
 
     // Set trigger GPIO and initialize linear sensors
     for (int i = 0; i < TRIG_COUNT; i++) 
     {
+		// REVIEW(Barach): This can be done in board.chcfg. For instance, in the <GPIOC> section:
+		//   <pin0
+		//     ID="TRIG_LT"
+		//     Type="PushPull"
+		//     Level="High"
+		//     Speed="Minimum"
+		//     Resistor="Floating"
+		//     Mode="Analog"
+		//     Alternate="0" />
         palSetPadMode(triggers[i].port, triggers[i].pad, triggers[i].mode);
 
         if (!linearSensorInit(&trigger_sensors[i], &sibConfig.trigger_id_t[i]))
@@ -152,6 +176,7 @@ msg_t steeringInputTransmit(void)
 
     if (stmAdcSample(&steering_adc)) {
         // Sample from paddles is 100 -> 0, subtract ADC value from 100 to flip
+		// REVIEW(Barach): I'd call this left_byte or left_word to indicate it isn't an actual percentage.
         left_percent = (uint8_t)((100.0f - triggerValue(TRIG_LT)) * UINT8_MAX_VALUE / 100.0f);
         right_percent = (uint8_t)((100.0f - triggerValue(TRIG_RT)) * UINT8_MAX_VALUE / 100.0f);
     }

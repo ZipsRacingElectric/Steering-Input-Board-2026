@@ -17,8 +17,8 @@ ALLINC += src
 # Source files
 CSRC =	$(ALLCSRC)		\
 		src/main.c		\
-		src/peripherals/steering_input.c	
-		
+		src/peripherals/steering_input.c
+
 # Common library includes
 include common/src/debug.mk
 include common/src/fault_handler.mk

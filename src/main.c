@@ -5,6 +5,8 @@
 // ChibiOS
 #include "ch.h"
 #include "hal.h"
+// REVIEW(Barach): You shouldn't ever need to include low-level driver files directly, as they are meant to be internal to
+// ChibiOS. Looks like it isn't doing anything here.
 #include "hal_can_lld.h"
 #include "peripherals/steering_input.h"
 
@@ -22,10 +24,12 @@ int main (void)
 	debugSerialInit (&SD1, NULL);
 
 	// Assign Can GPIO pads
+	// REVIEW(Barach): This is already done in board.chcfg, so no need.
 	palSetLineMode(GPIOA_CAN1_STBY, PAL_MODE_OUTPUT_PUSHPULL);
 	palSetLineMode(GPIOA_CAN1_RX, PAL_MODE_ALTERNATE(9));
 	palSetLineMode(GPIOA_CAN1_TX, PAL_MODE_ALTERNATE(9));
 	
+	// REVIEW(Barach): Nothing wrong with this, but usually I'd put this at the top-level scope (before main) just to be a bit cleaner.
 	// Start Can Driver
 	static const CANConfig CAN_DRIVER_CONFIG =
 	{
@@ -48,6 +52,9 @@ int main (void)
 	while (true) 
 	{
 		steeringInputTransmit();
+
+		// REVIEW(Barach): Might be a good idea to make this a constant (ex. #define CAN_TX_PERIOD or something like that) so
+		// we can tweak this pretty easily.
 		chThdSleepMilliseconds(50);
 	}
 

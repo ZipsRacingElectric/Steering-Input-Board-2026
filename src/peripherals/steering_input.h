@@ -36,17 +36,27 @@ typedef enum
 
 typedef struct 
 {
+	// REVIEW(Barach): The ioline_t type can be used in place of a port/pad pair. For instance:
+	//
+	//   ioline_t line = LINE_BTN_LU
+	//
+	// instead of:
+	//
+	//   ioportid_t port = GPIOB
+	//   uint16_t pad = GPIOB_BTN_LU
     ioportid_t port;
     uint16_t pad;
+
     iomode_t mode;
     const char* name;
 } button_t;
 
 typedef struct 
 {
+	// REVIEW(Barach): If you use board.chcfg, these can be removed (see steering_input.c for more info).
     ioportid_t port;
     uint16_t pad;
-    iomode_t mode;
+	iomode_t mode;
     const char* name;
 } trigger_t;
 
@@ -73,6 +83,7 @@ typedef struct
 /**
 * @brief Initialize the steering wheel buttons and paddles inputs with the correct GPIO port and pad.
 *
+// REVIEW(Barach): Old doc.
 * @param sib The device to initailize.
 * @param config The configuraton to use.
 * @return Returns true if successful, false if not successful.
@@ -83,6 +94,7 @@ bool steeringInputInit(void);
 /**
  * @brief Take GPIO and ADC input and transmit a can message.
  * 
+ // REVIEW(Barach): Old doc.
  * @param sib Contains pointer to can driver and transmit timeout.
  * @return MSG_OK if transmit is successful.
  */
