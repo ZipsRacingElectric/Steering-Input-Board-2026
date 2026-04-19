@@ -220,7 +220,7 @@
         Level="High"
         Speed="Minimum"
         Resistor="PullUp"
-        Mode="Alternate"
+        Mode="Input"
         Alternate="0" />
       <pin9
         ID="BTN_LD"
@@ -228,7 +228,7 @@
         Level="High"
         Speed="Minimum"
         Resistor="PullUp"
-        Mode="Alternate"
+        Mode="Input"
         Alternate="0" />
       <pin10
         ID="BTN_RU"
